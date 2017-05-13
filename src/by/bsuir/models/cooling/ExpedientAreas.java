@@ -9,8 +9,8 @@ public class ExpedientAreas {
     private double overheat; //deltaT
 
 
-    public ExpedientAreas(double logHeatFlux, double overheat) {
-        this.logHeatFlux = logHeatFlux;
+    public ExpedientAreas(double heatFlux, double overheat) {
+        this.logHeatFlux = Math.log10(heatFlux);
         this.overheat = overheat;
 
         this.EQ_1_2 = (overheat + 920)/400;
@@ -77,7 +77,7 @@ public class ExpedientAreas {
     //метод поиска области целесообразности
     public int findArea(){
         int area = 0; //номер области на графике
-        double q; //вычисляемая lg(q) по аппроксимированной формуле для сравнения с входной lg(q)
+        double q    ; //вычисляемая lg(q) по аппроксимированной формуле для сравнения с входной lg(q)
 
         //Алгоритм поиска области целесообразности
         if (overheat < 100){

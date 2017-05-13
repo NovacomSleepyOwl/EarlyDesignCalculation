@@ -1,6 +1,7 @@
 package by.bsuir.models.cooling;
 
 import by.bsuir.models.Element;
+import by.bsuir.models.cooling.types.CoolingType;
 
 import java.util.List;
 
@@ -28,20 +29,20 @@ public class CoolingSelection {
     private double fillingFactorVolume; // Kз - Коэффициент заполнения по объему
     private double minOverheat; //deltaTc - минимально допустимый перегрев элементов
     private double heatExchangeSurface; // Sp - Поверхность теплообмена
-    private double logHeatFluxDensity; //q - Плотность теплового потока, проходящего через поверхность теплообмена
+    private double heatFluxDensity; //q - Плотность теплового потока, проходящего через поверхность теплообмена
 
     private int primaryArea;
 
     //конструкторы
 
     //Известны: Кз, L1, L2, L3, P, Ti-min, Tc, Kp = 1
-    public CoolingSelection(double summaryPower,
-                            int maxAmbientTemperature,
-                            double blockWidth,
-                            double blockLength,
-                            double blockHeight,
-                            int maxElementOverheat,
-                            double fillingFactorVolume) {
+    public CoolingSelection(double summaryPower, //Рассеиваемая мощность
+                            int maxAmbientTemperature, //Максимальная температура окружающей среды
+                            double blockWidth, //L1
+                            double blockLength,//L2
+                            double blockHeight, //L3
+                            int maxElementOverheat, //Максимальный перегрев самого нетеплостойкого элемента
+                            double fillingFactorVolume ) { //Коэф. заполнения по объему
 
         this.summaryPower = summaryPower;
         this.maxAmbientTemperature = maxAmbientTemperature;
@@ -52,24 +53,87 @@ public class CoolingSelection {
         this.fillingFactorVolume = fillingFactorVolume;
         this.pressureCoefficient = 1;
 
-        this.heatExchangeSurface = 2*(blockLength * blockWidth + (blockLength + blockWidth)* blockHeight * fillingFactorVolume);
-        this.logHeatFluxDensity = Math.log10(summaryPower/heatExchangeSurface);
-        this.minOverheat = maxElementOverheat - maxAmbientTemperature;
-        setPrimaryArea();
+        recalculateInputData();
+
+
 
     }
 
-    private void setPrimaryArea() {
-        ExpedientAreas expedientAreas = new ExpedientAreas(logHeatFluxDensity, minOverheat );
-        this.primaryArea = expedientAreas.findArea();
+
+    public CoolingType defineCoolingType(){
+        recalculateInputData();
+        ForcedAirCooling forcedAirCooling = new ForcedAirCooling();
+        primaryArea = setPrimaryArea();
+
+        switch (primaryArea){
+
+            case 1:
+                return CoolingType.NATURAL_AIR;
+
+            case 2:
+                return forcedAirCooling.findForcedAirCoolingType(heatFluxDensity, minOverheat);
+
+            case 3:
+                return forcedAirCooling.findForcedAirCoolingType(heatFluxDensity, minOverheat);
+
+            case 4:
+                if(forcedAirCooling.getExpectation() < 3){
+                    return CoolingType.FORCED_LIQUID;
+                }
+                else return forcedAirCooling.findForcedAirCoolingType(heatFluxDensity, minOverheat);
+
+            case 5:
+                return CoolingType.FORCED_LIQUID;
+
+            case 6:
+                return CoolingType.FORCED_LIQUID__NATURAL_EVAPORATION;
+
+            case 7:
+                return CoolingType.FORCED_LIQUID__NATURAL_EVAPORATION__FORCED_EVAPORATION;
+
+            case 8:
+                return CoolingType.NATURAL_EVAPORATION__FORCED_EVAPORATION;
+
+            case 9:
+                return CoolingType.FORCED_EVAPORATION;
+
+            case 0:
+                return CoolingType.ERROR;
+
+            default:
+                return CoolingType.ERROR;
+
+        }
+
     }
+
+
+
+    public void recalculateInputData(){
+        //поверхность теплообмена
+        heatExchangeSurface = 2*(blockLength * blockWidth + (blockLength + blockWidth)* blockHeight * fillingFactorVolume);
+        //тепловой поток
+        heatFluxDensity = summaryPower * pressureCoefficient/heatExchangeSurface;
+        //дельта-Т
+        minOverheat = maxElementOverheat - maxAmbientTemperature;
+
+    }
+
+
+    private int setPrimaryArea() {
+        ExpedientAreas expedientArea = new ExpedientAreas(heatFluxDensity, minOverheat );
+        return expedientArea.findArea();
+    }
+
+
+
 
     public int getPrimaryArea() {
         return primaryArea;
     }
 
     public void showQAndT(){
-        System.out.println("lg(q) = " + (logHeatFluxDensity) + " , T = " + minOverheat);
+        System.out.println("lg(q) = " + (heatFluxDensity) + " , T = " + minOverheat);
         System.out.println("Area : " + getPrimaryArea());
     }
 }
