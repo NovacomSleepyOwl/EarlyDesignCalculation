@@ -1,0 +1,24 @@
+package by.bsuir.models.cooling.types;
+
+/**
+ * Created by SleepyOwl on 13.05.2017.
+ */
+public enum CoolingType {
+
+    NATURAL_AIR,
+
+    AIR_HERMETIC_INTERNAL,
+    AIR_HERMETIC_EXTERNAL,
+    AIR_PERFORATED,
+    AIR_BLOWN,
+    FORCED_LIQUID,
+    NATURAL_EVAPORATION,
+    FORCED_EVAPORATION,
+
+    //Для неопределенных зон
+    FORCED_LIQUID__NATURAL_EVAPORATION,
+    FORCED_LIQUID__NATURAL_EVAPORATION__FORCED_EVAPORATION,
+    NATURAL_EVAPORATION__FORCED_EVAPORATION,
+
+    ERROR
+}

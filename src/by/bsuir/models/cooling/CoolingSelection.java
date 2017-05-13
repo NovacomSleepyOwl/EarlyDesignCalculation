@@ -1,6 +1,7 @@
 package by.bsuir.models.cooling;
 
 import by.bsuir.models.Element;
+import by.bsuir.models.cooling.types.CoolingType;
 
 import java.util.List;
 
@@ -35,13 +36,13 @@ public class CoolingSelection {
     //конструкторы
 
     //Известны: Кз, L1, L2, L3, P, Ti-min, Tc, Kp = 1
-    public CoolingSelection(double summaryPower,
-                            int maxAmbientTemperature,
-                            double blockWidth,
-                            double blockLength,
-                            double blockHeight,
-                            int maxElementOverheat,
-                            double fillingFactorVolume) {
+    public CoolingSelection(double summaryPower, //Рассеиваемая мощность
+                            int maxAmbientTemperature, //Максимальная температура окружающей среды
+                            double blockWidth, //L1
+                            double blockLength,//L2
+                            double blockHeight, //L3
+                            int maxElementOverheat, //Максимальный перегрев самого нетеплостойкого элемента
+                            double fillingFactorVolume ) { //Коэф. заполнения по объему
 
         this.summaryPower = summaryPower;
         this.maxAmbientTemperature = maxAmbientTemperature;
@@ -52,17 +53,74 @@ public class CoolingSelection {
         this.fillingFactorVolume = fillingFactorVolume;
         this.pressureCoefficient = 1;
 
+        //поверхность теплообмена
         this.heatExchangeSurface = 2*(blockLength * blockWidth + (blockLength + blockWidth)* blockHeight * fillingFactorVolume);
-        this.logHeatFluxDensity = Math.log10(summaryPower/heatExchangeSurface);
+        //десятичный логарифм теплового потока
+        this.logHeatFluxDensity = Math.log10(summaryPower * pressureCoefficient/heatExchangeSurface);
+        //дельта-Т
         this.minOverheat = maxElementOverheat - maxAmbientTemperature;
-        setPrimaryArea();
+        //setPrimaryArea();
+
+
 
     }
 
-    private void setPrimaryArea() {
-        ExpedientAreas expedientAreas = new ExpedientAreas(logHeatFluxDensity, minOverheat );
-        this.primaryArea = expedientAreas.findArea();
+
+    public CoolingType defineCoolingType(){
+
+        ForcedAirCooling forcedAirCooling = new ForcedAirCooling();
+        primaryArea = setPrimaryArea();
+
+        switch (primaryArea){
+
+            case 1:
+                return CoolingType.NATURAL_AIR;
+
+            case 2:
+                return forcedAirCooling.findForcedAirCoolingType();
+
+            case 3:
+                return forcedAirCooling.findForcedAirCoolingType();
+
+            case 4:
+                if(forcedAirCooling.getExpectation() < 3){
+                    return CoolingType.FORCED_LIQUID;
+                }
+                else return forcedAirCooling.findForcedAirCoolingType();
+
+            case 5:
+                return CoolingType.FORCED_LIQUID;
+
+            case 6:
+                return CoolingType.FORCED_LIQUID__NATURAL_EVAPORATION;
+
+            case 7:
+                return CoolingType.FORCED_LIQUID__NATURAL_EVAPORATION__FORCED_EVAPORATION;
+
+            case 8:
+                return CoolingType.NATURAL_EVAPORATION__FORCED_EVAPORATION;
+
+            case 9:
+                return CoolingType.FORCED_EVAPORATION;
+
+            case 0:
+                return CoolingType.ERROR;
+
+            default:
+                return CoolingType.ERROR;
+
+        }
+
     }
+
+
+    private int setPrimaryArea() {
+        ExpedientAreas expedientArea = new ExpedientAreas(logHeatFluxDensity, minOverheat );
+        return expedientArea.findArea();
+    }
+
+
+
 
     public int getPrimaryArea() {
         return primaryArea;
