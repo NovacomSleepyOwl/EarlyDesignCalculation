@@ -11,14 +11,6 @@ public class Main {
 
     public static void main(String[] args) {
 
-        CoolingSelection coolingSelection = new CoolingSelection(6.95,
-                40,
-                0.09,
-                0.07,
-                0.055,
-                70,
-                0.5 );
-        coolingSelection.showQAndT();
 
         ForcedAirCooling forcedAirCooling = new ForcedAirCooling();
         forcedAirCooling.findForcedAirCoolingType(500, 15);
