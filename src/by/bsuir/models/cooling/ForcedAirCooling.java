@@ -14,15 +14,17 @@ public class ForcedAirCooling {
     private int massFlow; //массовый удельный расход воздуха
     private double coefficientW; //коэффициент оси координат, зависящий от массового удельного расхода воздуха
 
+
     private double[][] indexArray = new double[17][2];
 
     public ForcedAirCooling() {
         coefficientW = 1;
-
+        setIndexArray();
     }
 
     public ForcedAirCooling(int massFlow) {
         this.massFlow = massFlow;
+        setIndexArray();
 
         switch (massFlow) {
             case 0:
@@ -50,7 +52,9 @@ public class ForcedAirCooling {
 
     //В случае попадания в зону 2-4
     public CoolingType findForcedAirCoolingType(double heatFlux, double overheat){
-        double q;
+        double q1 = 50;
+        double q2 = q1 + 50;
+        double step;
         double t;
         double t0; //выше этой температуры p>3
         expectation = 0;
@@ -60,31 +64,34 @@ public class ForcedAirCooling {
             return CoolingType.NATURAL_AIR;
         }
 
-        if (heatFlux >= 50 && heatFlux < 100){
+        boolean j = true; //вспомогательный флаг
+        for (int i = 0; i < indexArray.length && j; i++){
+
             expectation = 3;
-            if (overheat <= 10*coefficientW){
-                t = 0;
-                while (t < overheat){
-                    t += 2*coefficientW;
-                    expectation++;
+
+            if(heatFlux >= q1 && heatFlux < q2){
+                j = false;
+                t0 = indexArray[i][0];
+                step = indexArray[i][1];
+                t = t0 * coefficientW;
+
+                if (overheat < t0){
+                    expectation = 1;
+                }
+                else{
+                    while (overheat > t){
+                        t += step * coefficientW;
+                        expectation++;
+                        if (expectation == 10){
+                            t = overheat;
+                        }
+                    }
                 }
             }
-
-        }
-
-        if (heatFlux >= 100 && heatFlux <= 150){
-            expectation = 2;
-            t = 0;
-            for(double i = 0; t <= overheat; i+= 3){
-                t += i * coefficientW;
-                expectation++;
-                if (expectation == 9){
-                    t = overheat;
-                }
+            if (j){
+                q1 += 50;
+                q2 += 50;
             }
-        }
-
-        if (heatFlux > 150 && heatFlux <= 400){
 
         }
 
@@ -97,13 +104,13 @@ public class ForcedAirCooling {
 
         //[i][j], где i - номер сегмента на графике, t0 = j0, шаг = j1
         indexArray[0][0]= 0;
-        indexArray[0][0]= 0;
+        indexArray[0][1]= 2;
 
-        indexArray[1][0]= 0;
+        indexArray[1][0]= 0; //100-150
         indexArray[2][0]= 5;
         indexArray[3][0]= 15;
         indexArray[4][0]= 20;
-        indexArray[5][0]= 27.5;
+        indexArray[5][0]= 25;
         indexArray[6][0]= 35;
         indexArray[7][0]= 40;
         indexArray[8][0]= 45;
@@ -120,7 +127,7 @@ public class ForcedAirCooling {
         indexArray[2][1]= 6.50;
         indexArray[3][1]= 6.50;
         indexArray[4][1]= 6.50;
-        indexArray[5][1]= 6.50;
+        indexArray[5][1]= 7.0;
         indexArray[6][1]= 6.50;
         indexArray[7][1]= 6.50;
         indexArray[8][1]= 6.50;

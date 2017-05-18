@@ -1,13 +1,15 @@
 package by.bsuir.models.cooling;
 
+import by.bsuir.models.cooling.types.CoolingType;
+
 import java.util.AbstractList;
+import java.util.List;
 
 public class ExpedientAreas {
     //Класс, для алгроитма поска области целесообразного применения типов охлаждения
 
     private double logHeatFlux; //q
     private double overheat; //deltaT
-
 
     public ExpedientAreas(double heatFlux, double overheat) {
         this.logHeatFlux = Math.log10(heatFlux);
