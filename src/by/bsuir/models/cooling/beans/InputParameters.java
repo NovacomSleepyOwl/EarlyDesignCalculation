@@ -32,6 +32,39 @@ public class InputParameters {
     private double minOverheat; //deltaTc - минимально допустимый перегрев элементов
     private double heatExchangeSurface; // Sp - Поверхность теплообмена
     private double heatFluxDensity; //q - Плотность теплового потока, проходящего через поверхность теплообмена
+    private double isStatic; //стационарная ли аппаратура (для учета массового расхода воздуха при продувном типе охлаждения)
+
+    public InputParameters(double summaryPower,
+                           int maxAmbientTemperature,
+                           double maxAmbientPressure,
+                           double blockWidth,
+                           double blockLength,
+                           double blockHeight,
+                           int maxElementOverheat,
+                           double fillingFactorVolume) {
+
+        this.summaryPower = summaryPower;
+        this.maxAmbientTemperature = maxAmbientTemperature;
+        this.maxAmbientPressure = maxAmbientPressure;
+        this.blockWidth = blockWidth;
+        this.blockLength = blockLength;
+        this.blockHeight = blockHeight;
+        this.maxElementOverheat = maxElementOverheat;
+        this.fillingFactorVolume = fillingFactorVolume;
+        this.pressureCoefficient = 1;
+
+        recalculateInputData();
+    }
+
+    public void recalculateInputData(){
+        //поверхность теплообмена
+        heatExchangeSurface = 2*(blockLength * blockWidth + (blockLength + blockWidth)* blockHeight * fillingFactorVolume);
+        //тепловой поток
+        heatFluxDensity = summaryPower * pressureCoefficient/heatExchangeSurface;
+        //дельта-Т
+        minOverheat = maxElementOverheat - maxAmbientTemperature;
+
+    }
 
     public double getSummaryPower() {
         return summaryPower;
@@ -167,5 +200,13 @@ public class InputParameters {
 
     public void setHeatFluxDensity(double heatFluxDensity) {
         this.heatFluxDensity = heatFluxDensity;
+    }
+
+    public double getIsStatic() {
+        return isStatic;
+    }
+
+    public void setIsStatic(double isStatic) {
+        this.isStatic = isStatic;
     }
 }
