@@ -1,6 +1,8 @@
 package by.bsuir.models.cooling.beans;
 
 import by.bsuir.models.Element;
+import by.bsuir.models.cooling.PressureCalculation;
+import by.bsuir.models.cooling.types.PressureType;
 
 import java.util.ArrayList;
 
@@ -14,8 +16,7 @@ public class InputParameters {
     private int maxAmbientTemperature; //Tc - максимальная температура окружающей среды
     private int minAmbientTemperature;
 
-    private double maxAmbientPressure;
-    private double minAmbientPressure;
+    private double ambientPressure;
 
     private double operationTime;
 
@@ -32,11 +33,10 @@ public class InputParameters {
     private double minOverheat; //deltaTc - минимально допустимый перегрев элементов
     private double heatExchangeSurface; // Sp - Поверхность теплообмена
     private double heatFluxDensity; //q - Плотность теплового потока, проходящего через поверхность теплообмена
-    private double isStatic; //стационарная ли аппаратура (для учета массового расхода воздуха при продувном типе охлаждения)
+    private boolean isStatic; //стационарная ли аппаратура (для учета массового расхода воздуха при продувном типе охлаждения)
 
     public InputParameters(double summaryPower,
                            int maxAmbientTemperature,
-                           double maxAmbientPressure,
                            double blockWidth,
                            double blockLength,
                            double blockHeight,
@@ -45,7 +45,6 @@ public class InputParameters {
 
         this.summaryPower = summaryPower;
         this.maxAmbientTemperature = maxAmbientTemperature;
-        this.maxAmbientPressure = maxAmbientPressure;
         this.blockWidth = blockWidth;
         this.blockLength = blockLength;
         this.blockHeight = blockHeight;
@@ -56,11 +55,33 @@ public class InputParameters {
         recalculateInputData();
     }
 
+    public InputParameters(double summaryPower,
+                           int maxAmbientTemperature,
+                           double blockWidth,
+                           double blockLength,
+                           double blockHeight,
+                           int maxElementOverheat,
+                           double fillingFactorVolume,
+                           double ambientPressure) {
+
+        this.summaryPower = summaryPower;
+        this.maxAmbientTemperature = maxAmbientTemperature;
+        this.blockWidth = blockWidth;
+        this.blockLength = blockLength;
+        this.blockHeight = blockHeight;
+        this.maxElementOverheat = maxElementOverheat;
+        this.fillingFactorVolume = fillingFactorVolume;
+        this.ambientPressure = ambientPressure;
+        this.pressureCoefficient = PressureCalculation.definePressureCoefficient(PressureType.HERMETIC_EQUAL, ambientPressure, ambientPressure, 0 );;
+
+        recalculateInputData();
+    }
+
     public void recalculateInputData(){
         //поверхность теплообмена
         heatExchangeSurface = 2*(blockLength * blockWidth + (blockLength + blockWidth)* blockHeight * fillingFactorVolume);
         //тепловой поток
-        heatFluxDensity = summaryPower * pressureCoefficient/heatExchangeSurface;
+        heatFluxDensity = summaryPower /heatExchangeSurface;
         //дельта-Т
         minOverheat = maxElementOverheat - maxAmbientTemperature;
 
@@ -90,20 +111,12 @@ public class InputParameters {
         this.minAmbientTemperature = minAmbientTemperature;
     }
 
-    public double getMaxAmbientPressure() {
-        return maxAmbientPressure;
+    public double getAmbientPressure() {
+        return ambientPressure;
     }
 
-    public void setMaxAmbientPressure(double maxAmbientPressure) {
-        this.maxAmbientPressure = maxAmbientPressure;
-    }
-
-    public double getMinAmbientPressure() {
-        return minAmbientPressure;
-    }
-
-    public void setMinAmbientPressure(double minAmbientPressure) {
-        this.minAmbientPressure = minAmbientPressure;
+    public void setAmbientPressure(double ambientPressure) {
+        this.ambientPressure = ambientPressure;
     }
 
     public double getOperationTime() {
@@ -202,11 +215,13 @@ public class InputParameters {
         this.heatFluxDensity = heatFluxDensity;
     }
 
-    public double getIsStatic() {
+    public boolean isStatic() {
         return isStatic;
     }
 
-    public void setIsStatic(double isStatic) {
-        this.isStatic = isStatic;
+    public void setStatic(boolean aStatic) {
+        isStatic = aStatic;
     }
+
+
 }

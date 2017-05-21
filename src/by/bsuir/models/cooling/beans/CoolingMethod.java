@@ -16,6 +16,23 @@ public class CoolingMethod {
     private int w; //массовый удельный расход воздуха для зоны принудительного водушного охлаждения
     private double g; //массовый удельный расход воздуха при продувном типе охлаждения
     private double deltaTc;
+    private double ambientPressure;
+    private double internalPressure;
+    private boolean isStatic;
+
+    public CoolingMethod() {
+        this.pressureCoefficient = 1;
+    }
+
+    public CoolingMethod(double pressureCoefficient) {
+        this.pressureCoefficient = pressureCoefficient;
+    }
+
+    public CoolingMethod(double ambientPressure, double internalPressure) {
+        this.ambientPressure = ambientPressure;
+        this.internalPressure = internalPressure;
+    }
+
 
 
     public CoolingType getType() {
@@ -72,5 +89,29 @@ public class CoolingMethod {
 
     public void setDeltaTc(double deltaTc) {
         this.deltaTc = deltaTc;
+    }
+
+    public boolean isStatic() {
+        return isStatic;
+    }
+
+    public void setStatic(boolean aStatic) {
+        isStatic = aStatic;
+    }
+
+    public double getAmbientPressure() {
+        return ambientPressure;
+    }
+
+    public void setAmbientPressure(double ambientPressure) {
+        this.ambientPressure = ambientPressure;
+    }
+
+    public double getInternalPressure() {
+        return internalPressure;
+    }
+
+    public void setInternalPressure(double internalPressure) {
+        this.internalPressure = internalPressure;
     }
 }

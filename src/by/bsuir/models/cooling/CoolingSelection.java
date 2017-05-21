@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class CoolingSelection {
 
 
-
+    //определения лучшего способа охлаждения воздухом
     public ArrayList<CoolingMethod> verifyArea(CoolingMethod inputMethod){
 
         ArrayList<CoolingMethod> output = new ArrayList<>();
@@ -30,7 +30,7 @@ public class CoolingSelection {
                     coolingMethod.setW(0);
                     coolingMethod.setExpectation(forcedAirCooling.findExpectation(coolingMethod));
 
-                    if (coolingMethod.getExpectation() >= 5){
+                    if (coolingMethod.getExpectation() >= 4){
                         coolingMethod.setType(CoolingType.NATURAL_AIR);
                         output.add(coolingMethod);
                         return output;
@@ -51,15 +51,43 @@ public class CoolingSelection {
 
                 return output;
         }
+        if (inputMethod.getType().equals(CoolingType.AIR_BLOWN)){
+            ForcedAirCooling forcedAirCooling = new ForcedAirCooling();
+
+            CoolingMethod coolingMethod = new CoolingMethod();
+            coolingMethod.setType(CoolingType.AIR_BLOWN);
+            coolingMethod.setQ(inputMethod.getQ());
+            coolingMethod.setDeltaTc(inputMethod.getDeltaTc());
+
+            if (inputMethod.getG() > 0){
+                coolingMethod.setG(inputMethod.getG());
+            }
+            else {
+                if (inputMethod.isStatic()){
+                    coolingMethod.setG(300);
+                }
+                else {
+                    coolingMethod.setG(215);
+                }
+            }
+            coolingMethod.setStatic(inputMethod.isStatic());
+            coolingMethod.setExpectation(forcedAirCooling.findExpectation(coolingMethod));
+
+            output.add(coolingMethod);
+            return output;
+        }
         else{
             output.add(inputMethod);
             return output;
         }
     }
 
+    //определение первичных способов охлаждения
     public CoolingMethod defineCoolingType(InputParameters inputParameters){
 
         CoolingMethod coolingMethod = new CoolingMethod();
+        coolingMethod.setAmbientPressure(inputParameters.getAmbientPressure());
+        coolingMethod.setPressureCoefficient(inputParameters.getPressureCoefficient());
 
         int primaryArea;
         primaryArea = setPrimaryArea(inputParameters);
@@ -114,9 +142,15 @@ public class CoolingSelection {
 
     }
 
-
+    //поиск первичной области по рис. 2.35
     private int setPrimaryArea(InputParameters inputParameters) {
-        ExpedientAreas expedientArea = new ExpedientAreas(inputParameters.getHeatFluxDensity(), inputParameters.getMinOverheat() );
+
+        //для пониженного давления
+        if (inputParameters.getPressureCoefficient() != 1){
+            ExpedientAreas expedientArea = new ExpedientAreas(inputParameters.getHeatFluxDensity() * inputParameters.getPressureCoefficient(), inputParameters.getMinOverheat());
+            return expedientArea.findArea();
+        }
+        ExpedientAreas expedientArea = new ExpedientAreas(inputParameters.getHeatFluxDensity(), inputParameters.getMinOverheat());
         return expedientArea.findArea();
     }
 
