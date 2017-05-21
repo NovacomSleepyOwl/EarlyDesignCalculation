@@ -10,20 +10,21 @@ import by.bsuir.models.cooling.types.CoolingType;
 public class ForcedAirCooling {
 
 
-    private double[][] hermeticIndexArray = new double[19][2];
-    private double[][] perforatedIndexArray = new double[19][2];
-    private double[][] blownIndexArray20 = new double[18][2];
-    private double[][] blownIndexArray40 = new double[18][2];
-    private double[][] blownIndexArray60 = new double[18][2];
+    private static double[][] hermeticIndexArray = new double[19][2];
+    private static double[][] perforatedIndexArray = new double[19][2];
+    private static double[][] blownIndexArray = new double[19][2];
+
 
     public ForcedAirCooling() {
         setHermeticIndexArray();
         setPerforatedIndexArray();
+        setHermeticIndexArray();
     }
 
     public ForcedAirCooling(int massFlow) {
-
-
+        setHermeticIndexArray();
+        setPerforatedIndexArray();
+        setHermeticIndexArray();
     }
 
     //В случае попадания в зону 2-4
@@ -34,7 +35,7 @@ public class ForcedAirCooling {
         double overheat = inputParameters.getDeltaTc();
         double g = inputParameters.getG();
         double[][] indexArray = new double[19][2];
-        double coefficientW = setMassAirFlow(inputParameters.getW(), inputParameters.getType()); //коэффициент оси координат, зависящий от массового удельного расхода воздуха
+        double coefficientW = setMassAirFlow(inputParameters.getW(), inputParameters.getType()); //коэффициент шага по оси координат, зависящий от массового удельного расхода воздуха
         double expectation;
 
 
@@ -46,6 +47,30 @@ public class ForcedAirCooling {
         }
         if (coolingType.equals(CoolingType.AIR_PERFORATED)){
             indexArray = getPerforatedIndexArray();
+        }
+        if (coolingType.equals(CoolingType.AIR_BLOWN)) {
+
+            coefficientW = setMassAirFlow(inputParameters.getG());
+            /*if (inputParameters.getG() > 0) {
+                coefficientW = setMassAirFlow(inputParameters.getG());
+            }
+            else {
+                coefficientW = setMassAirFlow(inputParameters.isStatic());
+            }
+*/
+            int option = 0;
+            if (inputParameters.getDeltaTc() < 20){
+                option = 1;
+            }
+            if (inputParameters.getDeltaTc() >= 20 && inputParameters.getDeltaTc() < 40){
+                option = 2;
+            }
+            if (inputParameters.getDeltaTc() >= 40 && inputParameters.getDeltaTc() <= 60){
+                option = 3;
+            }
+
+            return calculateBlownExpectation(heatFlux, coefficientW, option );
+
         }
 
         double q1 = 50;
@@ -90,6 +115,59 @@ public class ForcedAirCooling {
             }
 
         }
+
+        return expectation;
+    }
+
+    public double calculateBlownExpectation(double heatFlux, double airFlow, int option){
+        double expectation = 0;
+        boolean j = true;
+        double q1 = 0;
+        double q2 = q1 + 100;
+        double step;
+        double g0;
+        double g;
+
+
+        double[][] indexArray;
+        setBlownIndexArray(option);
+        indexArray = getBlownIndexArray();
+
+        for (int i = 0; i < indexArray.length && j; i++){
+            if (option == 2 || option == 3){
+                expectation = 4;
+            }
+            if (option == 1){
+                expectation = 3;
+            }
+
+            if (heatFlux >= q1 && heatFlux < q2){
+                j = false;
+                g0 = indexArray[i][0];
+                step = indexArray[i][1];
+                g = g0;
+
+                if (airFlow < g0){
+                    expectation = 1;
+                }
+                else {
+
+                    while (airFlow > g){
+                        g += step;
+                        expectation++;
+                        if (expectation == 10){
+                            g = airFlow;
+                        }
+                    }
+                }
+            }
+            if (j){
+                q1 += 100;
+                q2 += 100;
+            }
+
+        }
+
 
         return expectation;
     }
@@ -187,131 +265,140 @@ public class ForcedAirCooling {
 
     }
 
-    public void setBlownIndexArray20() {
-        //[i][j], где i - номер сегмента на графике, t0 = j0, шаг = j1
-        hermeticIndexArray[0][0]= 0;
-        hermeticIndexArray[0][1]= 2;
+    public void setBlownIndexArray(int option) {
 
-        hermeticIndexArray[1][0]= 0; //200-300
-        hermeticIndexArray[2][0]= 5; //300-400
-        hermeticIndexArray[3][0]= 15; //400-500
-        hermeticIndexArray[4][0]= 20; //500-600
-        hermeticIndexArray[5][0]= 25; //600-700
-        hermeticIndexArray[6][0]= 35; //700-800
-        hermeticIndexArray[7][0]= 40; //800-900
-        hermeticIndexArray[8][0]= 45; //900-100
-        hermeticIndexArray[9][0]= 45; //1000-1100
-        hermeticIndexArray[10][0]= 50; //1100-1200
-        hermeticIndexArray[11][0]= 55; //1200-1300
-        hermeticIndexArray[12][0]= 55; //1300-1400
-        hermeticIndexArray[13][0]= 60; //1400-1500
-        hermeticIndexArray[14][0]= 65; //1500-1600
-        hermeticIndexArray[15][0]= 65; //1600-1700
-        hermeticIndexArray[16][0]= 70; //1800-1900
-        hermeticIndexArray[17][0]= 80; //1900-2000
+        if (option == 1){
+            //[i][j], где i - номер сегмента на графике, t0 = j0, шаг = j1
+            blownIndexArray[0][0]= 0;
+            blownIndexArray[0][1]= 2;
 
-        hermeticIndexArray[1][1]= 3;
-        hermeticIndexArray[2][1]= 6.50;
-        hermeticIndexArray[3][1]= 6.50;
-        hermeticIndexArray[4][1]= 6.50;
-        hermeticIndexArray[5][1]= 7.0;
-        hermeticIndexArray[6][1]= 6.50;
-        hermeticIndexArray[7][1]= 6.50;
-        hermeticIndexArray[8][1]= 6.50;
-        hermeticIndexArray[9][1]= 6.50;
-        hermeticIndexArray[10][1]= 6.50;
-        hermeticIndexArray[11][1]= 6.50;
-        hermeticIndexArray[12][1]= 6.50;
-        hermeticIndexArray[13][1]= 6.50;
-        hermeticIndexArray[14][1]= 6.50;
-        hermeticIndexArray[15][1]= 6.50;
-        hermeticIndexArray[16][1]= 6.50;
-        hermeticIndexArray[17][1]= 6.50;
+            blownIndexArray[1][0]= 150; //200-300
+            blownIndexArray[2][0]= 200; //300-400
+            blownIndexArray[3][0]= 240; //400-500
+            blownIndexArray[4][0]= 280; //500-600
+            blownIndexArray[5][0]= 300; //600-700
+            blownIndexArray[6][0]= 340; //700-800
+            blownIndexArray[7][0]= 360; //800-900
+            blownIndexArray[8][0]= 380; //900-1000
+            blownIndexArray[9][0]= 390; //1000-1100
+            blownIndexArray[10][0]= 410; //1100-1200
+            blownIndexArray[11][0]= 440; //1200-1300
+            blownIndexArray[12][0]= 480; //1300-1400
+            blownIndexArray[13][0]= 500; //1400-1500
+            blownIndexArray[14][0]= 0; //1500-1600
+            blownIndexArray[15][0]= 0; //1600-1700
+            blownIndexArray[16][0]= 0; //1700-1800
+            blownIndexArray[17][0]= 0; //1800-1900
+            blownIndexArray[18][0]= 0; //1900-2000
+
+            blownIndexArray[1][1]= 100;
+            blownIndexArray[2][1]= 100;
+            blownIndexArray[3][1]= 100;
+            blownIndexArray[4][1]= 100;
+            blownIndexArray[5][1]= 100;
+            blownIndexArray[6][1]= 100;
+            blownIndexArray[7][1]= 100;
+            blownIndexArray[8][1]= 100;
+            blownIndexArray[9][1]= 100;
+            blownIndexArray[10][1]= 100;
+            blownIndexArray[11][1]= 100;
+            blownIndexArray[12][1]= 100;
+            blownIndexArray[13][1]= 100;
+            blownIndexArray[14][1]= 100;
+            blownIndexArray[15][1]= 100;
+            blownIndexArray[16][1]= 100;
+            blownIndexArray[17][1]= 100;
+            blownIndexArray[18][1]= 100;
+        }
+
+        if (option == 2){
+            blownIndexArray[0][0]= 0;
+            blownIndexArray[0][1]= 2;
+
+            blownIndexArray[1][0]= 0; //200-300
+            blownIndexArray[2][0]= 0; //300-400
+            blownIndexArray[3][0]= 50; //400-500
+            blownIndexArray[4][0]= 80; //500-600
+            blownIndexArray[5][0]= 100; //600-700
+            blownIndexArray[6][0]= 100; //700-800
+            blownIndexArray[7][0]= 120; //800-900
+            blownIndexArray[8][0]= 130; //900-1000
+            blownIndexArray[9][0]= 140; //1000-1100
+            blownIndexArray[10][0]= 160; //1100-1200
+            blownIndexArray[11][0]= 180; //1200-1300
+            blownIndexArray[12][0]= 190; //1300-1400
+            blownIndexArray[13][0]= 200; //1400-1500
+            blownIndexArray[14][0]= 230; //1500-1600
+            blownIndexArray[15][0]= 280; //1600-1700
+            blownIndexArray[16][0]= 310; //1700-1800
+            blownIndexArray[17][0]= 0; //1800-1900
+            blownIndexArray[18][0]= 0; //1900-2000
+
+
+            blownIndexArray[1][1]= 100;
+            blownIndexArray[2][1]= 100;
+            blownIndexArray[3][1]= 100;
+            blownIndexArray[4][1]= 150;
+            blownIndexArray[5][1]= 150;
+            blownIndexArray[6][1]= 150;
+            blownIndexArray[7][1]= 150;
+            blownIndexArray[8][1]= 150;
+            blownIndexArray[9][1]= 150;
+            blownIndexArray[10][1]= 150;
+            blownIndexArray[11][1]= 150;
+            blownIndexArray[12][1]= 150;
+            blownIndexArray[13][1]= 150;
+            blownIndexArray[14][1]= 150;
+            blownIndexArray[15][1]= 150;
+            blownIndexArray[16][1]= 150;
+            blownIndexArray[17][1]= 150;
+            blownIndexArray[18][1]= 150;
+        }
+
+        if (option == 3){
+            blownIndexArray[0][0]= 0;
+            blownIndexArray[0][1]= 2;
+
+            blownIndexArray[1][0]= 0; //200-300
+            blownIndexArray[2][0]= 0; //300-400
+            blownIndexArray[3][0]= 0; //400-500
+            blownIndexArray[4][0]= 0; //500-600
+            blownIndexArray[5][0]= 0; //600-700
+            blownIndexArray[6][0]= 0; //700-800
+            blownIndexArray[7][0]= 0; //800-900
+            blownIndexArray[8][0]= 0; //900-1000
+            blownIndexArray[9][0]= 0; //1000-1100
+            blownIndexArray[10][0]= 0; //1100-1200
+            blownIndexArray[11][0]= 40; //1200-1300
+            blownIndexArray[12][0]= 80; //1300-1400
+            blownIndexArray[13][0]= 100; //1400-1500
+            blownIndexArray[14][0]= 120; //1500-1600
+            blownIndexArray[15][0]= 140; //1600-1700
+            blownIndexArray[16][0]= 180; //1700-1800
+            blownIndexArray[17][0]= 220; //1800-1900
+            blownIndexArray[18][0]= 260; //1900-2000
+
+            blownIndexArray[1][1]= 180;
+            blownIndexArray[2][1]= 180;
+            blownIndexArray[3][1]= 180;
+            blownIndexArray[4][1]= 180;
+            blownIndexArray[5][1]= 180;
+            blownIndexArray[6][1]= 180;
+            blownIndexArray[7][1]= 180;
+            blownIndexArray[8][1]= 180;
+            blownIndexArray[9][1]= 180;
+            blownIndexArray[10][1]= 180;
+            blownIndexArray[11][1]= 180;
+            blownIndexArray[12][1]= 180;
+            blownIndexArray[13][1]= 180;
+            blownIndexArray[14][1]= 180;
+            blownIndexArray[15][1]= 180;
+            blownIndexArray[16][1]= 180;
+            blownIndexArray[17][1]= 180;
+            blownIndexArray[18][1]= 180;
+        }
     }
 
-    public void setBlownIndexArray40() {
-        //[i][j], где i - номер сегмента на графике, t0 = j0, шаг = j1
-        hermeticIndexArray[0][0]= 0;
-        hermeticIndexArray[0][1]= 2;
-
-        hermeticIndexArray[1][0]= 0; //200-300
-        hermeticIndexArray[2][0]= 5; //300-400
-        hermeticIndexArray[3][0]= 15; //400-500
-        hermeticIndexArray[4][0]= 20; //500-600
-        hermeticIndexArray[5][0]= 25; //600-700
-        hermeticIndexArray[6][0]= 35; //700-800
-        hermeticIndexArray[7][0]= 40; //800-900
-        hermeticIndexArray[8][0]= 45; //900-100
-        hermeticIndexArray[9][0]= 45; //1000-1100
-        hermeticIndexArray[10][0]= 50; //1100-1200
-        hermeticIndexArray[11][0]= 55; //1200-1300
-        hermeticIndexArray[12][0]= 55; //1300-1400
-        hermeticIndexArray[13][0]= 60; //1400-1500
-        hermeticIndexArray[14][0]= 65; //1500-1600
-        hermeticIndexArray[15][0]= 65; //1600-1700
-        hermeticIndexArray[16][0]= 70; //1800-1900
-        hermeticIndexArray[17][0]= 80; //1900-2000
-
-        hermeticIndexArray[1][1]= 3;
-        hermeticIndexArray[2][1]= 6.50;
-        hermeticIndexArray[3][1]= 6.50;
-        hermeticIndexArray[4][1]= 6.50;
-        hermeticIndexArray[5][1]= 7.0;
-        hermeticIndexArray[6][1]= 6.50;
-        hermeticIndexArray[7][1]= 6.50;
-        hermeticIndexArray[8][1]= 6.50;
-        hermeticIndexArray[9][1]= 6.50;
-        hermeticIndexArray[10][1]= 6.50;
-        hermeticIndexArray[11][1]= 6.50;
-        hermeticIndexArray[12][1]= 6.50;
-        hermeticIndexArray[13][1]= 6.50;
-        hermeticIndexArray[14][1]= 6.50;
-        hermeticIndexArray[15][1]= 6.50;
-        hermeticIndexArray[16][1]= 6.50;
-        hermeticIndexArray[17][1]= 6.50;
-    }
-
-    public void setBlownIndexArray60() {
-        //[i][j], где i - номер сегмента на графике, t0 = j0, шаг = j1
-        hermeticIndexArray[0][0]= 0;
-        hermeticIndexArray[0][1]= 2;
-
-        hermeticIndexArray[1][0]= 150; //200-300
-        hermeticIndexArray[2][0]= 200; //300-400
-        hermeticIndexArray[3][0]= 240; //400-500
-        hermeticIndexArray[4][0]= 280; //500-600
-        hermeticIndexArray[5][0]= 300; //600-700
-        hermeticIndexArray[6][0]= 340; //700-800
-        hermeticIndexArray[7][0]= 360; //800-900
-        hermeticIndexArray[8][0]= 380; //900-1000
-        hermeticIndexArray[9][0]= 390; //1000-1100
-        hermeticIndexArray[10][0]= 410; //1100-1200
-        hermeticIndexArray[11][0]= 440; //1200-1300
-        hermeticIndexArray[12][0]= 480; //1300-1400
-        hermeticIndexArray[13][0]= 500; //1400-1500
-        hermeticIndexArray[14][0]= 0; //1500-1600
-        hermeticIndexArray[15][0]= 0; //1600-1700
-        hermeticIndexArray[16][0]= 0; //1800-1900
-        hermeticIndexArray[17][0]= 0; //1900-2000
-
-        hermeticIndexArray[1][1]= 100;
-        hermeticIndexArray[2][1]= 100;
-        hermeticIndexArray[3][1]= 100;
-        hermeticIndexArray[4][1]= 100;
-        hermeticIndexArray[5][1]= 100;
-        hermeticIndexArray[6][1]= 100;
-        hermeticIndexArray[7][1]= 100;
-        hermeticIndexArray[8][1]= 100;
-        hermeticIndexArray[9][1]= 100;
-        hermeticIndexArray[10][1]= 100;
-        hermeticIndexArray[11][1]= 100;
-        hermeticIndexArray[12][1]= 100;
-        hermeticIndexArray[13][1]= 100;
-        hermeticIndexArray[14][1]= 100;
-        hermeticIndexArray[15][1]= 100;
-        hermeticIndexArray[16][1]= 100;
-        hermeticIndexArray[17][1]= 100;
-    }
 
     public double setMassAirFlow(int airFlow, CoolingType coolingType){
         int massFlow = airFlow;
@@ -384,6 +471,7 @@ public class ForcedAirCooling {
         return perforatedIndexArray;
     }
 
-
-
+    public double[][] getBlownIndexArray() {
+        return blownIndexArray;
+    }
 }

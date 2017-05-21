@@ -16,6 +16,7 @@ public class CoolingMethod {
     private int w; //массовый удельный расход воздуха для зоны принудительного водушного охлаждения
     private double g; //массовый удельный расход воздуха при продувном типе охлаждения
     private double deltaTc;
+    private boolean isStatic;
 
 
     public CoolingType getType() {
@@ -72,5 +73,13 @@ public class CoolingMethod {
 
     public void setDeltaTc(double deltaTc) {
         this.deltaTc = deltaTc;
+    }
+
+    public boolean isStatic() {
+        return isStatic;
+    }
+
+    public void setStatic(boolean aStatic) {
+        isStatic = aStatic;
     }
 }

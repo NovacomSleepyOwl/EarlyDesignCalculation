@@ -51,6 +51,31 @@ public class CoolingSelection {
 
                 return output;
         }
+        if (inputMethod.getType().equals(CoolingType.AIR_BLOWN)){
+            ForcedAirCooling forcedAirCooling = new ForcedAirCooling();
+
+            CoolingMethod coolingMethod = new CoolingMethod();
+            coolingMethod.setType(CoolingType.AIR_BLOWN);
+            coolingMethod.setQ(inputMethod.getQ());
+            coolingMethod.setDeltaTc(inputMethod.getDeltaTc());
+
+            if (inputMethod.getG() > 0){
+                coolingMethod.setG(inputMethod.getG());
+            }
+            else {
+                if (inputMethod.isStatic()){
+                    coolingMethod.setG(300);
+                }
+                else {
+                    coolingMethod.setG(215);
+                }
+            }
+            coolingMethod.setStatic(inputMethod.isStatic());
+            coolingMethod.setExpectation(forcedAirCooling.findExpectation(coolingMethod));
+
+            output.add(coolingMethod);
+            return output;
+        }
         else{
             output.add(inputMethod);
             return output;

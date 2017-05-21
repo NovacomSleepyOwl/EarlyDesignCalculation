@@ -32,7 +32,7 @@ public class InputParameters {
     private double minOverheat; //deltaTc - минимально допустимый перегрев элементов
     private double heatExchangeSurface; // Sp - Поверхность теплообмена
     private double heatFluxDensity; //q - Плотность теплового потока, проходящего через поверхность теплообмена
-    private double isStatic; //стационарная ли аппаратура (для учета массового расхода воздуха при продувном типе охлаждения)
+    private boolean isStatic; //стационарная ли аппаратура (для учета массового расхода воздуха при продувном типе охлаждения)
 
     public InputParameters(double summaryPower,
                            int maxAmbientTemperature,
@@ -202,11 +202,11 @@ public class InputParameters {
         this.heatFluxDensity = heatFluxDensity;
     }
 
-    public double getIsStatic() {
+    public boolean isStatic() {
         return isStatic;
     }
 
-    public void setIsStatic(double isStatic) {
-        this.isStatic = isStatic;
+    public void setStatic(boolean aStatic) {
+        isStatic = aStatic;
     }
 }

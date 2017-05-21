@@ -16,13 +16,15 @@ public class Main {
         CoolingSelection coolingSelection = new CoolingSelection();
 
         CoolingMethod coolingMethod = new CoolingMethod();
-        coolingMethod.setQ(200);
-        coolingMethod.setDeltaTc(20);
-        coolingMethod.setType(CoolingType.FORCED_AIR_OR_NATURAL_AIR);
+        coolingMethod.setQ(400);
+        //coolingMethod.setG(500);
+        coolingMethod.setDeltaTc(10);
+        coolingMethod.setStatic(true);
+        coolingMethod.setType(CoolingType.AIR_BLOWN);
         ArrayList<CoolingMethod> output = coolingSelection.verifyArea(coolingMethod);
 
         for (CoolingMethod i : output){
-            System.out.println(i.getExpectation() + " " + i.getType() + " " + "W = " + i.getW());
+            System.out.println(i.getExpectation() + " " + i.getType() + " " + "W = " + i.getG());
 
         }
 
