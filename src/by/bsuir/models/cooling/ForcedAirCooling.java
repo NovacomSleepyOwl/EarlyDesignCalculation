@@ -31,7 +31,7 @@ public class ForcedAirCooling {
     public double findExpectation(CoolingMethod inputParameters){
 
         CoolingType coolingType = inputParameters.getType();
-        double heatFlux = inputParameters.getQ();
+        double heatFlux = inputParameters.getQ() * inputParameters.getPressureCoefficient();
         double overheat = inputParameters.getDeltaTc();
         double g = inputParameters.getG();
         double[][] indexArray = new double[19][2];
@@ -41,7 +41,6 @@ public class ForcedAirCooling {
 
         if (coolingType.equals(CoolingType.AIR_HERMETIC_INTERNAL)){
             indexArray = getHermeticIndexArray();
-
         }
         if (coolingType.equals(CoolingType.AIR_HERMETIC_EXTERNAL)){
             indexArray = getHermeticIndexArray();

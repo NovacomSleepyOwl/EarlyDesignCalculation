@@ -17,11 +17,11 @@ public class CoolingSelection {
         ArrayList<CoolingMethod> output = new ArrayList<>();
 
         if (inputMethod.getType().equals(CoolingType.FORCED_AIR) ||
-                inputMethod.getType().equals(CoolingType.FORCED_AIR_OR_NATURAL_AIR) ||
-                inputMethod.getType().equals(CoolingType.FORCED_AIR_OR_FORCED_LIQUID)){
+                inputMethod.getType().equals(CoolingType.FORCED_AIR_OR_NATURAL_AIR)){
 
                 ForcedAirCooling forcedAirCooling = new ForcedAirCooling();
 
+                //проверка, хватит ли естественного воздушного охлаждения
                 if (inputMethod.getType().equals(CoolingType.FORCED_AIR_OR_NATURAL_AIR)){
                     CoolingMethod coolingMethod = new CoolingMethod();
                     coolingMethod.setType(CoolingType.AIR_HERMETIC_INTERNAL);
@@ -47,6 +47,24 @@ public class CoolingSelection {
 
                     output.add(coolingMethod);
                 }
+
+                for (int i = 1; i <= 4; i++){
+                    CoolingMethod coolingMethod = new CoolingMethod();
+                    coolingMethod.setType(CoolingType.AIR_HERMETIC_EXTERNAL);
+                    coolingMethod.setQ(inputMethod.getQ());
+                    coolingMethod.setDeltaTc(inputMethod.getDeltaTc());
+                    coolingMethod.setW(i);
+                    coolingMethod.setExpectation(forcedAirCooling.findExpectation(coolingMethod));
+
+                    output.add(coolingMethod);
+                }
+
+            CoolingMethod coolingMethod = new CoolingMethod();
+            coolingMethod.setType(CoolingType.AIR_PERFORATED);
+            coolingMethod.setQ(inputMethod.getQ());
+            coolingMethod.setDeltaTc(inputMethod.getDeltaTc());
+            coolingMethod.setExpectation(forcedAirCooling.findExpectation(coolingMethod));
+            output.add(coolingMethod);
 
 
                 return output;

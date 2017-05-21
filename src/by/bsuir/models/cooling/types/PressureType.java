@@ -9,5 +9,8 @@ public enum PressureType {
     HERMETIC_UNEQUAL,
     PERFORATED,
     HERMETIC_BLOWN_ON,
-    HERMETIC_MIXED_AIR
+    HERMETIC_MIXED_AIR,
+
+    DEFAULT
+
 }

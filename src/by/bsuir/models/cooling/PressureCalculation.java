@@ -21,6 +21,7 @@ public class PressureCalculation {
 
     }
 
+    //определить коэффициент давления
     public static double definePressureCoefficient(PressureType type, double pressure, double internalPressure, int w){
 
         if (type.equals(PressureType.HERMETIC_EQUAL)){
@@ -62,6 +63,18 @@ public class PressureCalculation {
                 }
             }
         }
+
+        if (type.equals(PressureType.PERFORATED)){
+            setPerforated();
+
+            for (int i = 0; i < equalHermetic.length; i++){
+                if (pressure == equalHermetic[i][0]){
+                    return equalHermetic[i][1];
+                }
+            }
+        }
+
+
 
         return 0;
     }

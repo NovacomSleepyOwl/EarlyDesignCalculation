@@ -1,6 +1,8 @@
 package by.bsuir.models.cooling.beans;
 
+import by.bsuir.models.cooling.PressureCalculation;
 import by.bsuir.models.cooling.types.CoolingType;
+import by.bsuir.models.cooling.types.PressureType;
 
 import java.util.ArrayList;
 
@@ -10,27 +12,33 @@ import java.util.ArrayList;
 public class CoolingMethod {
 
     private CoolingType type; //тип
+    private PressureType pressureType; //тип для рассчета коэффициента давления
     private double expectation; //вероятность
     private double q; //тепловой поток
     private double pressureCoefficient; //коэф. давления
     private int w; //массовый удельный расход воздуха для зоны принудительного водушного охлаждения
     private double g; //массовый удельный расход воздуха при продувном типе охлаждения
-    private double deltaTc;
-    private double ambientPressure;
-    private double internalPressure;
-    private boolean isStatic;
+    private double deltaTc; //перегрев
+    private double ambientPressure; //внешнее давление
+    private double internalPressure; //внутреннее давление (при наддуве)
+    private boolean isStatic; //стационарная ли аппаратура
 
     public CoolingMethod() {
         this.pressureCoefficient = 1;
+        this.pressureType = PressureType.DEFAULT;
     }
 
     public CoolingMethod(double pressureCoefficient) {
         this.pressureCoefficient = pressureCoefficient;
     }
 
-    public CoolingMethod(double ambientPressure, double internalPressure) {
+    public CoolingMethod(PressureType pressureType, double ambientPressure, double internalPressure, int airFlow) {
+        this.pressureType = pressureType;
         this.ambientPressure = ambientPressure;
         this.internalPressure = internalPressure;
+        this.w = airFlow;
+
+        this.pressureCoefficient = PressureCalculation.definePressureCoefficient(pressureType, ambientPressure, internalPressure, airFlow);
     }
 
 
