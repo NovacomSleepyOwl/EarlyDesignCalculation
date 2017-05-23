@@ -86,9 +86,9 @@ public class ForcedAirCooling {
 
             if(heatFlux >= q1 && heatFlux < q2){
                 j = false;
-                t0 = indexArray[i][0];
-                step = indexArray[i][1];
-                t = t0 * coefficientW;
+                t0 = indexArray[i][0] * coefficientW;
+                step = indexArray[i][1] * coefficientW;
+                t = t0 ;
 
                 if (overheat < t0){
                     expectation = 1;

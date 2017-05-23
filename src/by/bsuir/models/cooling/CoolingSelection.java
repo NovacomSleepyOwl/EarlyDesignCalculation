@@ -104,6 +104,8 @@ public class CoolingSelection {
     public CoolingMethod defineCoolingType(InputParameters inputParameters){
 
         CoolingMethod coolingMethod = new CoolingMethod();
+        coolingMethod.setQ(inputParameters.getHeatFluxDensity());
+        coolingMethod.setDeltaTc(inputParameters.getMinOverheat());
         coolingMethod.setAmbientPressure(inputParameters.getAmbientPressure());
         coolingMethod.setPressureCoefficient(inputParameters.getPressureCoefficient());
 
