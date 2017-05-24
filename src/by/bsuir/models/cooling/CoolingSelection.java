@@ -1,6 +1,5 @@
 package by.bsuir.models.cooling;
 
-import by.bsuir.models.Element;
 import by.bsuir.models.cooling.beans.CoolingMethod;
 import by.bsuir.models.cooling.beans.InputParameters;
 import by.bsuir.models.cooling.types.CoolingType;

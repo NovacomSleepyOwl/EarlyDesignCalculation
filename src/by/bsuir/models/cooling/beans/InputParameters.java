@@ -1,6 +1,5 @@
 package by.bsuir.models.cooling.beans;
 
-import by.bsuir.models.Element;
 import by.bsuir.models.cooling.PressureCalculation;
 import by.bsuir.models.cooling.types.PressureType;
 
@@ -24,7 +23,6 @@ public class InputParameters {
     private double blockLength; //L2
     private double blockHeight; //L3
 
-    private ArrayList<Element> elements; //Для расчета максимальной температуры элементов, коэффициентов заполнения.
     private double bodyVolume; // V - Объем корпуса
 
     private double pressureCoefficient; // Kp - Коэффициент атмосферного давления
@@ -149,14 +147,6 @@ public class InputParameters {
 
     public void setBlockHeight(double blockHeight) {
         this.blockHeight = blockHeight;
-    }
-
-    public ArrayList<Element> getElements() {
-        return elements;
-    }
-
-    public void setElements(ArrayList<Element> elements) {
-        this.elements = elements;
     }
 
     public double getBodyVolume() {
