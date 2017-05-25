@@ -8,14 +8,15 @@ import java.util.Comparator;
  */
 public class Element {
 
-    private double tempPredetermined;
-    private double tempCalculated;
-    private double tempMeasured;
-    private double overheat;
-    private int numberOf;
-    private int index;
-    private String name;
-    private boolean isSubjectToInvestigation;
+    private double tempPredetermined; //Т зад.
+    private double tempCalculated; //Т расч.
+    private double tempMeasured; //Т изм.
+    private double overheat; //перегрев
+    private int numberOf; //количество
+    private int index; //номер
+    private String name; //имя
+    private boolean isSubjectToInvestigation; //подлежит расчету
+    private double thermalModel; // ожидаемый тепловой режим элемента (для сравнения с Т по ТУ)
 
 
 
@@ -92,6 +93,11 @@ public class Element {
         this.name = name;
     }
 
+    public double getThermalModel() {
+        return thermalModel;
+    }
 
-
+    public void setThermalModel(double thermalModel) {
+        this.thermalModel = thermalModel;
+    }
 }

@@ -7,14 +7,17 @@ import java.util.ArrayList;
  */
 public class InputData {
 
-    private double ambientTemperature;
-    private double averageBlockTemperature;
-    private double permissibleOverheat;
-    private ArrayList<Element> elements;
-    private double expectationForFirstThreeElements;
+    private double ambientTemperature; //Т окр. среды
+    private double averageBlockTemperature; //средняя температура в блоке (расч)
+    private double permissibleOverheat; //допустимый перегрев
+    private double permissibleAmbientTemperature; //допустимая температура вокруг элементов
+    private ArrayList<Element> elements; //массив элементов
+    private double expectationForFirstThreeElements; //вероятность отказа первых трех элементов
+
+    private boolean isForcedCooling; //принудительное охлаждение
 
 
-    private boolean isForcedCooling;
+
 
     public double getAmbientTemperature() {
         return ambientTemperature;
@@ -62,5 +65,13 @@ public class InputData {
 
     public void setExpectationForFirstThreeElements(double expectationForFirstThreeElements) {
         this.expectationForFirstThreeElements = expectationForFirstThreeElements;
+    }
+
+    public double getPermissibleAmbientTemperature() {
+        return permissibleAmbientTemperature;
+    }
+
+    public void setPermissibleAmbientTemperature(double permissibleAmbientTemperature) {
+        this.permissibleAmbientTemperature = permissibleAmbientTemperature;
     }
 }
