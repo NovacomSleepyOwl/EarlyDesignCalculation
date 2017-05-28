@@ -97,6 +97,13 @@ public class Element {
         return thermalModel;
     }
 
+    public Element(double tempPredetermined, double tempCalculated, String name) {
+        this.tempPredetermined = tempPredetermined;
+        this.tempCalculated = tempCalculated;
+        this.name = name;
+        this.overheat = tempPredetermined - tempCalculated;
+    }
+
     public void setThermalModel(double thermalModel) {
         this.thermalModel = thermalModel;
     }

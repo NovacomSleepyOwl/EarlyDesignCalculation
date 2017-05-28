@@ -78,7 +78,7 @@ public class ThermalModeEvaluation {
             }
             else {
                 element.setSubjectToInvestigation(false);
-                elements1.remove(element);
+                //elements1.remove(element);
             }
         }
 
@@ -130,7 +130,7 @@ public class ThermalModeEvaluation {
         return epsilon + s * k;
     }
 
-    //ценка макета
+    //Оценка макета
     public Output modelEvaluation(Output input){
 
 
