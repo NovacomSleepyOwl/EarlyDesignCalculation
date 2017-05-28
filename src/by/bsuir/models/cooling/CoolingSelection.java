@@ -24,6 +24,7 @@ public class CoolingSelection {
                 if (inputMethod.getType().equals(CoolingType.FORCED_AIR_OR_NATURAL_AIR)){
                     CoolingMethod coolingMethod = new CoolingMethod();
                     coolingMethod.setType(CoolingType.AIR_HERMETIC_INTERNAL);
+                    coolingMethod.setPressureCoefficient(inputMethod.getPressureCoefficient());
                     coolingMethod.setQ(inputMethod.getQ());
                     coolingMethod.setDeltaTc(inputMethod.getDeltaTc());
                     coolingMethod.setW(0);
@@ -31,6 +32,9 @@ public class CoolingSelection {
 
                     if (coolingMethod.getExpectation() >= 4){
                         coolingMethod.setType(CoolingType.NATURAL_AIR);
+                        coolingMethod.setPressureCoefficient(inputMethod.getPressureCoefficient());
+                        coolingMethod.setQ(inputMethod.getQ());
+                        coolingMethod.setDeltaTc(inputMethod.getDeltaTc());
                         output.add(coolingMethod);
                         return output;
                     }
@@ -39,6 +43,7 @@ public class CoolingSelection {
                 for(int i = 1; i <= 3 ; i++){
                     CoolingMethod coolingMethod = new CoolingMethod();
                     coolingMethod.setType(CoolingType.AIR_HERMETIC_INTERNAL);
+                    coolingMethod.setPressureCoefficient(inputMethod.getPressureCoefficient());
                     coolingMethod.setQ(inputMethod.getQ());
                     coolingMethod.setDeltaTc(inputMethod.getDeltaTc());
                     coolingMethod.setW(i);
@@ -50,6 +55,7 @@ public class CoolingSelection {
                 for (int i = 1; i <= 4; i++){
                     CoolingMethod coolingMethod = new CoolingMethod();
                     coolingMethod.setType(CoolingType.AIR_HERMETIC_EXTERNAL);
+                    coolingMethod.setPressureCoefficient(inputMethod.getPressureCoefficient());
                     coolingMethod.setQ(inputMethod.getQ());
                     coolingMethod.setDeltaTc(inputMethod.getDeltaTc());
                     coolingMethod.setW(i);
@@ -61,12 +67,14 @@ public class CoolingSelection {
 
             CoolingMethod coolingMethod = new CoolingMethod();
             coolingMethod.setType(CoolingType.AIR_PERFORATED);
+            coolingMethod.setPressureCoefficient(inputMethod.getPressureCoefficient());
             coolingMethod.setQ(inputMethod.getQ());
             coolingMethod.setDeltaTc(inputMethod.getDeltaTc());
             coolingMethod.setExpectation(forcedAirCooling.findExpectation(coolingMethod));
             output.add(coolingMethod);
 
             CoolingMethod blownCoolingMethod = new CoolingMethod();
+            blownCoolingMethod.setPressureCoefficient(inputMethod.getPressureCoefficient());
             blownCoolingMethod.setType(CoolingType.AIR_BLOWN);
             blownCoolingMethod.setQ(inputMethod.getQ());
             blownCoolingMethod.setDeltaTc(inputMethod.getDeltaTc());
