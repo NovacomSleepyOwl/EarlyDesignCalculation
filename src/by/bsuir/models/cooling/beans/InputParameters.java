@@ -16,6 +16,7 @@ public class InputParameters {
     private int minAmbientTemperature;
 
     private double ambientPressure;
+    private double internalPressure;
 
     private double operationTime;
 
@@ -213,5 +214,11 @@ public class InputParameters {
         isStatic = aStatic;
     }
 
+    public double getInternalPressure() {
+        return internalPressure;
+    }
 
+    public void setInternalPressure(double internalPressure) {
+        this.internalPressure = internalPressure;
+    }
 }

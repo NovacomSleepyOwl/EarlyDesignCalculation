@@ -3,6 +3,7 @@ package by.bsuir.models.cooling;
 import by.bsuir.models.cooling.beans.CoolingMethod;
 import by.bsuir.models.cooling.beans.InputParameters;
 import by.bsuir.models.cooling.types.CoolingType;
+import by.bsuir.models.cooling.types.PressureType;
 
 import java.util.ArrayList;
 
@@ -41,12 +42,37 @@ public class CoolingSelection {
                 }
 
                 for(int i = 1; i <= 3 ; i++){
-                    CoolingMethod coolingMethod = new CoolingMethod();
+                    CoolingMethod coolingMethod;
+                    if (inputMethod.getAmbientPressure() == 0){
+                        coolingMethod = new CoolingMethod();
+                    }
+                    else {
+                        if (inputMethod.getInternalPressure() == 0){
+                            coolingMethod = new CoolingMethod(
+                                    PressureType.HERMETIC_MIXED_AIR,
+                                    inputMethod.getAmbientPressure(),
+                                    inputMethod.getAmbientPressure(),
+                                    i
+                            );
+                        }
+                        else {
+                            coolingMethod = new CoolingMethod(
+                                    PressureType.HERMETIC_MIXED_AIR,
+                                    inputMethod.getAmbientPressure(),
+                                    inputMethod.getAmbientPressure(),
+                                    i
+                            );
+
+                        }
+
+
+                    }
+
                     coolingMethod.setType(CoolingType.AIR_HERMETIC_INTERNAL);
-                    coolingMethod.setPressureCoefficient(inputMethod.getPressureCoefficient());
+                    //coolingMethod.setPressureCoefficient(inputMethod.getPressureCoefficient());
                     coolingMethod.setQ(inputMethod.getQ());
                     coolingMethod.setDeltaTc(inputMethod.getDeltaTc());
-                    coolingMethod.setW(i);
+                    //coolingMethod.setW(i);
                     coolingMethod.setExpectation(forcedAirCooling.findExpectation(coolingMethod));
 
                     output.add(coolingMethod);

@@ -4,13 +4,10 @@ package by.bsuir.view.cooling;
  * Created by SleepyOwl on 26.05.2017.
  */
 import by.bsuir.models.cooling.CoolingSelection;
-import by.bsuir.models.cooling.PressureCalculation;
 import by.bsuir.models.cooling.beans.CoolingMethod;
 import by.bsuir.models.cooling.beans.InputParameters;
-import by.bsuir.models.thermal.beans.Output;
 import by.bsuir.view.View;
 
-import javax.swing.JOptionPane;
 import java.util.ArrayList;
 
 /**
@@ -372,6 +369,7 @@ public class CoolingView extends javax.swing.JFrame {
             );
         }
         else {
+
             input = new InputParameters(
                     Double.parseDouble(jTextField1.getText()),
                     Integer.parseInt(jTextField2.getText()),
@@ -382,7 +380,10 @@ public class CoolingView extends javax.swing.JFrame {
                     Double.parseDouble(jTextField7.getText()),
                     Double.parseDouble(jComboBox1.getSelectedItem().toString())
             );
+
+
         }
+
 
 
         if (jComboBox3.getSelectedItem().toString().equals("Стационарный")){
@@ -398,9 +399,9 @@ public class CoolingView extends javax.swing.JFrame {
             message += " " + e.toString() + "\n";
             message += "\n";
         }
-        OutputCooling outputCooling = new OutputCooling(message);
-        outputCooling.setVisible(true);
-        //JOptionPane.showMessageDialog(null, message, "Output", JOptionPane.PLAIN_MESSAGE);
+        PrepareCoolingOutput prepareCoolingOutput = new PrepareCoolingOutput(message);
+        prepareCoolingOutput.setVisible(true);
+
     }
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {

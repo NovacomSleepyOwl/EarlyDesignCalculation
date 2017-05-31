@@ -3,12 +3,12 @@ package by.bsuir.view.cooling;
 /**
  * Created by SleepyOwl on 28.05.2017.
  */
-public class OutputCooling extends javax.swing.JFrame {
+public class PrepareCoolingOutput extends javax.swing.JFrame {
 
     /**
      * Creates new form OutputCooling
      */
-    public OutputCooling(String lable) {
+    public PrepareCoolingOutput(String lable) {
         initComponents();
         this.jTextArea1.setText(lable);
     }
@@ -100,20 +100,20 @@ public class OutputCooling extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(OutputCooling.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PrepareCoolingOutput.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(OutputCooling.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PrepareCoolingOutput.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(OutputCooling.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PrepareCoolingOutput.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(OutputCooling.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PrepareCoolingOutput.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new OutputCooling("").setVisible(true);
+                new PrepareCoolingOutput("").setVisible(true);
             }
         });
     }

@@ -37,9 +37,9 @@ public class PressureCalculation {
         if (type.equals(PressureType.HERMETIC_UNEQUAL)){
             setUnequalHermetic(internalPressure);
 
-            for (int i = 0; i < equalHermetic.length; i++){
-                if (pressure == equalHermetic[i][0]){
-                    return equalHermetic[i][1];
+            for (int i = 0; i < unequalHermetic.length; i++){
+                if (pressure == unequalHermetic[i][0]){
+                    return unequalHermetic[i][1];
                 }
             }
         }
@@ -47,19 +47,19 @@ public class PressureCalculation {
         if (type.equals(PressureType.HERMETIC_BLOWN_ON)){
             setHermeticBlownOn(w);
 
-            for (int i = 0; i < equalHermetic.length; i++){
-                if (pressure == equalHermetic[i][0]){
-                    return equalHermetic[i][1];
+            for (int i = 0; i < hermeticBlownOn.length; i++){
+                if (pressure == hermeticBlownOn[i][0]){
+                    return hermeticBlownOn[i][1];
                 }
             }
         }
 
         if (type.equals(PressureType.HERMETIC_MIXED_AIR)){
-            setHermeticBlownOn(w);
+            setHermeticMixedAir(w);
 
-            for (int i = 0; i < equalHermetic.length; i++){
-                if (pressure == equalHermetic[i][0]){
-                    return equalHermetic[i][1];
+            for (int i = 0; i < hermeticMixedAir.length; i++){
+                if (pressure == hermeticMixedAir[i][0]){
+                    return hermeticMixedAir[i][1];
                 }
             }
         }
@@ -67,9 +67,9 @@ public class PressureCalculation {
         if (type.equals(PressureType.PERFORATED)){
             setPerforated();
 
-            for (int i = 0; i < equalHermetic.length; i++){
-                if (pressure == equalHermetic[i][0]){
-                    return equalHermetic[i][1];
+            for (int i = 0; i < perforated.length; i++){
+                if (pressure == perforated[i][0]){
+                    return perforated[i][1];
                 }
             }
         }
