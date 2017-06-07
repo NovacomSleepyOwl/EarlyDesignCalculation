@@ -268,10 +268,13 @@ public class ThermalView extends javax.swing.JFrame {
         // TODO add your handling code here:
         DefaultTableModel table = (DefaultTableModel)jTable1.getModel();
 
-        if (Double.parseDouble(this.jTextField3.getText()) < Double.parseDouble(this.jTextField2.getText())){
+        if ( (Double.parseDouble(this.jTextField3.getText()) < Double.parseDouble(this.jTextField2.getText()))
+                && (Double.parseDouble(this.jTextField5.getText()) > (Double.parseDouble(this.jTextField2.getText()) - Double.parseDouble(this.jTextField3.getText())) ) ){
             Element element = new Element(Double.parseDouble(this.jTextField2.getText()), Double.parseDouble(this.jTextField3.getText()), this.jTextField1.getText());
+            //element.setTempMeasured(0);
             elementList.add(element);
             table.addRow(new Object[] {element.getName(), element.getTempPredetermined(), element.getTempCalculated(), element.getOverheat()});
+
         }
         else{
             JOptionPane.showMessageDialog(null, "Рассчитанная температура элемента должна быть меньше заданной по ТУ");
@@ -306,13 +309,24 @@ public class ThermalView extends javax.swing.JFrame {
         message += "вероятность отказа первых трех элементов: " + ev.firstThreeEvaluation(input).getExpectationForFirstThreeElements() + "\n";
         if (ev.firstThreeEvaluation(input).getExpectationForFirstThreeElements() < 0.05){
             message += "так как вероятность отказа < 0,05, \nможно сделать вывод о соответствии теплового режима нормальному";
+            message += "\n\n<измерьте температуры элементов и обновите таблицу>";
+            this.jLabel6.setEnabled(true);
+            this.jTextField4.setEnabled(true);
+            this.jButton1.setEnabled(false);
+            this.jButton3.setEnabled(false);
+            this.jTextField1.setEnabled(false);
+            this.jTextField2.setEnabled(false);
+            this.jTextField3.setEnabled(false);
         }
         else message += "тепловой режим не соответствует нормальному, так как \nтак как вероятность отказа >= 0,05";
 
         JOptionPane.showMessageDialog(null, message);
+
+
     }
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        ThermalModeEvaluation evaluation = new ThermalModeEvaluation();
+        JOptionPane.showMessageDialog(null, evaluation.sortElementsForModel(elementList));
     }
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -348,11 +362,19 @@ public class ThermalView extends javax.swing.JFrame {
             elementList.get(i).setTempPredetermined(Double.parseDouble(jTextField2.getText()));
             elementList.get(i).setTempCalculated(Double.parseDouble(jTextField3.getText()));
             elementList.get(i).setOverheat(Double.parseDouble(jTextField2.getText()) - Double.parseDouble(jTextField3.getText()));
+            if (!jTextField4.getText().equals("")){
+                elementList.get(i).setTempMeasured(Double.parseDouble(jTextField4.getText()));
+            }
+
             DefaultTableModel table = (DefaultTableModel)jTable1.getModel();
             table.setValueAt(elementList.get(i).getName(), i, 0);
             table.setValueAt(elementList.get(i).getTempPredetermined(), i, 1);
             table.setValueAt(elementList.get(i).getTempCalculated(), i, 2);
             table.setValueAt(elementList.get(i).getOverheat(), i, 3);
+            if (elementList.get(i).getTempMeasured() != 0){
+                table.setValueAt(elementList.get(i).getTempMeasured(), i, 5);
+            }
+
         }
         else{
             JOptionPane.showMessageDialog(null, "Рассчитанная температура элемента должна быть меньше заданной по ТУ");

@@ -86,20 +86,20 @@ public class ThermalModeEvaluation {
     }
 
     //Сортировка на стадии макетирования
-    private ArrayList<Element> sortElementsForModel(ArrayList<Element> inputElements){
-        ArrayList<Element> outputElements = inputElements;
+    public int sortElementsForModel(ArrayList<Element> inputElements){
+
         int number = 0;
-        for (int i = 0; i < outputElements.size() && number != i; i++){
-            if ((Const.coefficientKValues[i][1] * 10) < outputElements.get(i).getOverheat()){
-                number = i;
+        for (int i = 0; i < inputElements.size(); i++){
+            if ((Const.coefficientKValues[i][1] * 10) < inputElements.get(i).getOverheat()){
+                number++;
             }
         }
         number++;
-        for (;number < outputElements.size(); number++){
-            outputElements.remove(number);
+        for (int i = 0; i < number; i++){
+            inputElements.get(i).setSubjectToInvestigation(true);
         }
 
-        return outputElements;
+        return number;
     }
 
     private double defineEpsilon(ArrayList<Element> inputElements){
