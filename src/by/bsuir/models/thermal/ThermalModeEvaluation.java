@@ -54,7 +54,7 @@ public class ThermalModeEvaluation {
 
 
     //рассчитать вероятность перегрева первых трех элементов
-    private double calculateForThreeExpectation(double overheat1, double overheat2, double overheat3){
+    public double calculateForThreeExpectation(double overheat1, double overheat2, double overheat3){
         if (overheat1 > 30 || overheat2 > 30 || overheat3 > 30){
 
             return 0;

@@ -1,5 +1,7 @@
 package by.bsuir.view.cooling;
 
+import javax.swing.*;
+
 /**
  * Created by SleepyOwl on 28.05.2017.
  */
@@ -27,7 +29,7 @@ public class PrepareCoolingOutput extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
         setLocation(new java.awt.Point(0, 0));
         setLocationByPlatform(true);
         setResizable(false);

@@ -5,13 +5,17 @@ package by.bsuir.models.thermal.beans;
  */
 public class Const {
 
-    public static final double[][] fFunctionValues = new double[31][2];
-    public static final double[][] coefficientKValues = new double[199][2];
-    public static final double mEpsilon = 0;
-    public static final double standardDeviation = 10;
-    public static final double expectation = 0.99;
-    public static final double significance = 0.1;
+    public static  double[][] fFunctionValues = new double[31][2];
+    public static  double[][] coefficientKValues = new double[201][2];
+    public static  double mEpsilon = 0;
+    public static  double standardDeviation = 10;
+    public static  double expectation = 0.99;
+    public static  double significance = 0.1;
 
+    public Const() {
+        setCoefficientKValues();
+        setfFunctionValues();
+    }
 
     private void setfFunctionValues(){
         for (int i = 0; i < 30; i++){

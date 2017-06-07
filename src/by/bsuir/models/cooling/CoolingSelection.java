@@ -57,34 +57,50 @@ public class CoolingSelection {
                         }
                         else {
                             coolingMethod = new CoolingMethod(
-                                    PressureType.HERMETIC_MIXED_AIR,
+                                    PressureType.HERMETIC_UNEQUAL,
                                     inputMethod.getAmbientPressure(),
-                                    inputMethod.getAmbientPressure(),
+                                    inputMethod.getInternalPressure(),
                                     i
                             );
 
                         }
-
-
                     }
 
                     coolingMethod.setType(CoolingType.AIR_HERMETIC_INTERNAL);
-                    //coolingMethod.setPressureCoefficient(inputMethod.getPressureCoefficient());
                     coolingMethod.setQ(inputMethod.getQ());
                     coolingMethod.setDeltaTc(inputMethod.getDeltaTc());
-                    //coolingMethod.setW(i);
                     coolingMethod.setExpectation(forcedAirCooling.findExpectation(coolingMethod));
 
                     output.add(coolingMethod);
                 }
 
                 for (int i = 1; i <= 4; i++){
-                    CoolingMethod coolingMethod = new CoolingMethod();
+                    CoolingMethod coolingMethod;
+                    if (inputMethod.getAmbientPressure() == 0){
+                        coolingMethod = new CoolingMethod();
+                    }
+                    else {
+                        if (inputMethod.getInternalPressure() == 0){
+                            coolingMethod = new CoolingMethod(
+                                    PressureType.HERMETIC_BLOWN_ON,
+                                    inputMethod.getAmbientPressure(),
+                                    inputMethod.getAmbientPressure(),
+                                    i
+                            );
+                        }
+                        else {
+                            coolingMethod = new CoolingMethod(
+                                    PressureType.HERMETIC_UNEQUAL,
+                                    inputMethod.getAmbientPressure(),
+                                    inputMethod.getInternalPressure(),
+                                    i
+                            );
+
+                        }
+                    }
                     coolingMethod.setType(CoolingType.AIR_HERMETIC_EXTERNAL);
-                    coolingMethod.setPressureCoefficient(inputMethod.getPressureCoefficient());
                     coolingMethod.setQ(inputMethod.getQ());
                     coolingMethod.setDeltaTc(inputMethod.getDeltaTc());
-                    coolingMethod.setW(i);
                     coolingMethod.setExpectation(forcedAirCooling.findExpectation(coolingMethod));
 
                     output.add(coolingMethod);
@@ -110,10 +126,10 @@ public class CoolingSelection {
             }
             else {
                 if (inputMethod.isStatic()){
-                    blownCoolingMethod.setG(300);
+                    blownCoolingMethod.setG(350);
                 }
                 else {
-                    blownCoolingMethod.setG(215);
+                    blownCoolingMethod.setG(250);
                 }
             }
             blownCoolingMethod.setStatic(inputMethod.isStatic());
@@ -136,6 +152,7 @@ public class CoolingSelection {
         coolingMethod.setDeltaTc(inputParameters.getMinOverheat());
         coolingMethod.setAmbientPressure(inputParameters.getAmbientPressure());
         coolingMethod.setPressureCoefficient(inputParameters.getPressureCoefficient());
+        coolingMethod.setStatic(inputParameters.isStatic());
 
         int primaryArea;
         primaryArea = setPrimaryArea(inputParameters);

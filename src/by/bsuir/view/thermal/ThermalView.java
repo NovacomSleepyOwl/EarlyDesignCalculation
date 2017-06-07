@@ -51,6 +51,11 @@ public class ThermalView extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
+        jTextField4 = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        jButton7 = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        jTextField5 = new javax.swing.JTextField();
 
         jButton6.setText("Составить последовательность");
 
@@ -119,6 +124,11 @@ public class ThermalView extends javax.swing.JFrame {
         });
 
         jButton3.setText("Удалить");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("Редактирование списка элементов");
 
@@ -136,47 +146,74 @@ public class ThermalView extends javax.swing.JFrame {
             }
         });
 
+        jTextField4.setEnabled(false);
+
+        jLabel6.setText("Измеренная температура, [К]:");
+        jLabel6.setEnabled(false);
+
+        jButton7.setText("Обработка результатов измерений");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setText("Допустимый перегрев:");
+
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addContainerGap(151, Short.MAX_VALUE)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                                .addComponent(jLabel1)
-                                                                .addGap(113, 113, 113))
-                                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                                .addComponent(jLabel5)
-                                                                .addGap(104, 104, 104))))
                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(jLabel1)
+                                                .addGap(113, 113, 113))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                                         .addGroup(layout.createSequentialGroup()
-                                                                .addContainerGap()
+                                                                .addGap(0, 0, Short.MAX_VALUE)
+                                                                .addComponent(jButton5))
+                                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                                                .addGap(78, 202, Short.MAX_VALUE)
+                                                                .addComponent(jButton7))
+                                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                                        .addComponent(jLabel2)
-                                                                        .addComponent(jLabel3)
-                                                                        .addComponent(jLabel4))
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                                        .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
-                                                                        .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.LEADING)
-                                                                        .addComponent(jTextField1)))
-                                                        .addGroup(layout.createSequentialGroup()
-                                                                .addGap(41, 41, 41)
-                                                                .addComponent(jButton1)
-                                                                .addGap(58, 58, 58)
-                                                                .addComponent(jButton2)
-                                                                .addGap(47, 47, 47)
-                                                                .addComponent(jButton3))
-                                                        .addGroup(layout.createSequentialGroup()
-                                                                .addGap(24, 24, 24)
-                                                                .addComponent(jButton4)
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                .addComponent(jButton5)))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                                                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                                                                .addGap(151, 151, 151)
+                                                                                .addComponent(jLabel5))
+                                                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                                                                .addContainerGap()
+                                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                                                        .addComponent(jLabel2)
+                                                                                        .addComponent(jLabel3)
+                                                                                        .addComponent(jLabel4)
+                                                                                        .addComponent(jLabel6))
+                                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                                                        .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.LEADING)
+                                                                                        .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.LEADING)
+                                                                                        .addComponent(jTextField1)
+                                                                                        .addComponent(jTextField4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                                                                .addGap(52, 52, 52)
+                                                                                .addComponent(jLabel7)
+                                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                                                                .addGap(41, 41, 41)
+                                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                                        .addComponent(jButton4)
+                                                                                        .addGroup(layout.createSequentialGroup()
+                                                                                                .addComponent(jButton1)
+                                                                                                .addGap(58, 58, 58)
+                                                                                                .addComponent(jButton2)
+                                                                                                .addGap(47, 47, 47)
+                                                                                                .addComponent(jButton3)))))
+                                                                .addGap(0, 0, Short.MAX_VALUE)))
+                                                .addGap(18, 18, 18)))
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap())
         );
@@ -200,17 +237,27 @@ public class ThermalView extends javax.swing.JFrame {
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                                         .addComponent(jLabel4)
                                                         .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addGap(48, 48, 48)
+                                                .addGap(18, 18, 18)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jLabel6))
+                                                .addGap(34, 34, 34)
                                                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                                         .addComponent(jButton2)
                                                         .addComponent(jButton3)
                                                         .addComponent(jButton1))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addGap(54, 54, 54)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(jButton5)
-                                                        .addComponent(jButton4))))
+                                                        .addComponent(jLabel7)
+                                                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(jButton5)
+                                                .addGap(18, 18, 18)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(jButton4)
+                                                        .addComponent(jButton7))))
                                 .addGap(28, 28, 28))
         );
 
@@ -253,6 +300,19 @@ public class ThermalView extends javax.swing.JFrame {
             table.setValueAt(elementList.get(i).getIndex(), i, 4);
 
         }
+
+
+        String message = "";
+        message += "вероятность отказа первых трех элементов: " + ev.firstThreeEvaluation(input).getExpectationForFirstThreeElements() + "\n";
+        if (ev.firstThreeEvaluation(input).getExpectationForFirstThreeElements() < 0.05){
+            message += "так как вероятность отказа < 0,05, \nможно сделать вывод о соответствии теплового режима нормальному";
+        }
+        else message += "тепловой режим не соответствует нормальному, так как \nтак как вероятность отказа >= 0,05";
+
+        JOptionPane.showMessageDialog(null, message);
+    }
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
     }
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -298,6 +358,14 @@ public class ThermalView extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Рассчитанная температура элемента должна быть меньше заданной по ТУ");
         }
 
+    }
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+        int i = jTable1.getSelectedRow();
+        elementList.remove(i);
+        DefaultTableModel table = (DefaultTableModel)jTable1.getModel();
+        table.removeRow(jTable1.getSelectedRow());
     }
 
     /**
@@ -347,15 +415,22 @@ public class ThermalView extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField jTextField5;
+    // End of variables declaration
+
     // End of variables declaration
 }
